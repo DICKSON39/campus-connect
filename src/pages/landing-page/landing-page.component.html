@@ -1,0 +1,154 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo">CampusConnect</div>
+
+    <div class="hamburger" (click)="toggleMenu()">
+      ☰
+    </div>
+
+    <div class="nav-links" [ngClass]="{ open: isMenuOpen }">
+      <a routerLink="/" (click)="toggleMenu()">Home</a>
+      <a routerLink="/about" (click)="toggleMenu()">About</a>
+      <a routerLink="/contact" (click)="toggleMenu()">Contact</a>
+
+      <ng-container *ngIf="!isAuthenticated">
+        <button routerLink="/login" class="btn login" (click)="toggleMenu()">Sign In</button>
+        <button routerLink="/register" class="btn signup" (click)="toggleMenu()">Sign Up</button>
+      </ng-container>
+
+      <ng-container *ngIf="isAuthenticated">
+        <a *ngIf="isAdmin()" routerLink="/admin/dashboard" class="nav-link" (click)="toggleMenu()">Admin Dashboard</a>
+
+        <a routerLink="/profile" class="nav-link" (click)="toggleMenu()">Profile</a>
+        <button class="btn primary" (click)="openPostCreationModal()">Create Post</button>
+        <button class="btn logout" (click)="logout()">Logout</button>
+      </ng-container>
+    </div>
+  </div>
+</nav>
+
+
+<header class="hero">
+  <h1>Welcome to CampusConnect 📚💬</h1>
+  <p>Where students post, vibe, and stay connected.</p>
+</header>
+
+<app-post-creation-modal
+  *ngIf="showPostCreationModal"
+  [visible]="showPostCreationModal"
+  [isAuthenticated]="isAuthenticated"
+  (postCreated)="onPostSuccessfullyCreated()"
+  (close)="onModalClose()">
+</app-post-creation-modal>
+
+<section class="landing">
+  <div class="container">
+    <h2>Latest Vibes 📰</h2>
+
+    <div *ngIf="posts.length === 0" class="no-posts-message">
+      <p>No posts yet... be the first to post!</p>
+    </div>
+
+    <div class="post" *ngFor="let post of posts">
+      <div class="post-header">
+        <p class="author">
+          Posted by: {{ post.author.first_name }} {{ post.author.last_name }}
+          <span class="email"> ({{ post.author.email }})</span>
+        </p>
+
+        <ng-container *ngIf="editingPostId === post.id; else displayPostContent">
+          <form [formGroup]="postEditForm" (ngSubmit)="saveEditedPost()">
+            <div class="form-group">
+              <label for="editPostTitle" class="sr-only">Post Title</label>
+              <input id="editPostTitle" type="text" formControlName="title" placeholder="Edit title..." />
+              <div *ngIf="hasPostEditError('title', 'required')" class="validation-error">Title is required.</div>
+              <div *ngIf="hasPostEditError('title', 'minlength')" class="validation-error">Title min 3 chars.</div>
+            </div>
+            <div class="form-group">
+              <label for="editPostContent" class="sr-only">Post Content</label>
+              <textarea id="editPostContent" formControlName="content" placeholder="Edit content..." rows="5"></textarea>
+              <div *ngIf="hasPostEditError('content', 'required')" class="validation-error">Content is required.</div>
+              <div *ngIf="hasPostEditError('content', 'minlength')" class="validation-error">Content min 10 chars.</div>
+            </div>
+            <button type="submit" [disabled]="postEditForm.invalid">Save</button>
+            <button type="button" (click)="cancelEditPost()" class="btn-cancel">Cancel</button>
+          </form>
+        </ng-container>
+
+        <ng-template #displayPostContent>
+          <h3>{{ post.title }}</h3>
+          <div *ngIf="post.image_url" class="post-image-container">
+            <img [src]="post.image_url" alt="Post Image" class="post-image">
+          </div>
+          <p class="content">{{ post.content }}</p>
+
+          <div class="post-actions" *ngIf="isPostAuthor(post.author.id)">
+            <button class="btn-edit-post" (click)="startEditPost(post)">Edit Post</button>
+            <button class="btn-delete-post" (click)="onDeletePost(post.id)">Delete Post</button>
+          </div>
+        </ng-template>
+      </div>
+
+
+      <div class="comments-section">
+        <h4>Comments ({{ post.comments.length }})</h4>
+
+        <div *ngIf="post.comments.length > 0; else noComments" class="comments-list">
+          <div *ngFor="let comment of post.comments" class="comment-item">
+            <ng-container *ngIf="editingCommentId === comment.id; else displayCommentContent">
+              <form [formGroup]="commentEditForm" (ngSubmit)="saveEditedComment()">
+                <div class="form-group">
+                  <label for="editCommentContent" class="sr-only">Comment Content</label>
+                  <textarea id="editCommentContent" formControlName="content" placeholder="Edit comment..." rows="3"></textarea>
+                  <div *ngIf="hasCommentEditError('content', 'required')" class="validation-error">Comment is required.</div>
+                  <div *ngIf="hasCommentEditError('content', 'minlength')" class="validation-error">Comment min 2 chars.</div>
+                </div>
+                <button type="submit" [disabled]="commentEditForm.invalid">Save</button>
+                <button type="button" (click)="cancelEditComment()" class="btn-cancel">Cancel</button>
+              </form>
+            </ng-container>
+
+            <ng-template #displayCommentContent>
+              <p class="comment-content">{{ comment.content }}</p>
+              <p class="comment-author">
+                Commented by: {{ comment.commenter.first_name }} {{ comment.commenter.last_name }}
+                <ng-container *ngIf="isCommentAuthor(comment.commenter.id)">
+                  <button class="btn-edit-comment" (click)="startEditComment(comment)">Edit</button>
+                  <button class="btn-delete-comment" (click)="onDeleteComment(comment.id)">Delete</button>
+                </ng-container>
+              </p>
+            </ng-template>
+          </div>
+        </div>
+        <ng-template #noComments>
+          <p class="no-comments-message">No comments yet. Be the first to comment!</p>
+        </ng-template>
+
+        <div class="comment-form-section" *ngIf="isAuthenticated">
+          <form [formGroup]="getCommentForm(post.id)" (ngSubmit)="onSubmitComment(post.id)" class="comment-form">
+            <div class="form-group">
+              <label [for]="'commentContent-' + post.id" class="sr-only">Add your comment</label>
+              <textarea
+                [id]="'commentContent-' + post.id"
+                formControlName="content"
+                placeholder="Write a comment..."
+                rows="3"
+              ></textarea>
+              <div *ngIf="hasCommentError(post.id, 'content', 'required')" class="validation-error">Comment is required.</div>
+              <div *ngIf="hasCommentError(post.id, 'content', 'minlength')" class="validation-error">Comment must be at least 2 characters.</div>
+            </div>
+
+            <button type="submit" [disabled]="getCommentForm(post.id).invalid">Post Comment</button>
+
+            <div *ngIf="commentSuccessMessages[post.id]" class="success-message">
+              {{ commentSuccessMessages[post.id] }}
+            </div>
+            <div *ngIf="commentErrorMessages[post.id]" class="error-message">
+              {{ commentErrorMessages[post.id] }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,802 @@
+/* General Body and Container Styles */
+body {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5; /* Light grey background */
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- Navbar Styles --- */
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure navbar stays on top */
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px; /* Wider container for navbar */
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #007bff; /* CampusConnect blue */
+}
+
+/* Hamburger for Mobile */
+.hamburger {
+  display: none; /* Hidden by default on larger screens */
+  font-size: 2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.nav-links .btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links .btn.login {
+  background-color: #007bff;
+  color: white;
+}
+
+.nav-links .btn.login:hover {
+  background-color: #0056b3;
+}
+
+.nav-links .btn.signup {
+  background-color: #28a745;
+  color: white;
+}
+
+.nav-links .btn.signup:hover {
+  background-color: #218838;
+}
+
+.nav-links .btn.logout {
+  background-color: #dc3545;
+  color: white;
+}
+
+.nav-links .btn.logout:hover {
+  background-color: #c82333;
+}
+
+/* NEW: Style for the 'Create Post' button in the navbar */
+.nav-links .btn.primary {
+  background-color: #17a2b8; /* A nice light blue/teal */
+  color: white;
+}
+
+.nav-links .btn.primary:hover {
+  background-color: #138496;
+}
+
+
+/* --- Hero Section --- */
+.hero {
+  background-color: #e0f2f7; /* Lighter blue for hero */
+  color: #004085;
+  padding: 60px 20px;
+  text-align: center;
+  border-bottom: 1px solid #d1ecf1;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+/* --- Landing Section (Posts) --- */
+.landing {
+  padding: 40px 0;
+}
+
+.landing h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.landing h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: #007bff;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.no-posts-message {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Individual Post Card */
+.post {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+  padding: 30px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.post:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.post-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.post-header h3 {
+  font-size: 1.8rem;
+  color: #007bff;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.post-header .author {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.post-header .author .email {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.post-content {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 25px;
+  white-space: pre-wrap; /* Preserves whitespace and line breaks */
+  word-wrap: break-word; /* Breaks long words */
+}
+
+/* --- Comments Section --- */
+.comments-section {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px dashed #e0e0e0; /* Dashed line to separate from post content */
+}
+
+.comments-section h4 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.comments-list {
+  background-color: #fcfcfc;
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.comment-item {
+  background-color: #f7f7f7;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.comment-item:last-child {
+  margin-bottom: 0; /* No margin after the last comment */
+}
+
+.comment-content {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.comment-author {
+  font-size: 0.8rem;
+  color: #888;
+  text-align: right;
+  font-style: italic;
+}
+
+.no-comments-message {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+  padding: 10px;
+  background-color: #fcfcfc;
+  border-radius: 5px;
+  border: 1px dashed #e0e0e0;
+}
+
+/* --- Responsive Design (Mobile-First) --- */
+
+/* Small devices (e.g., phones) */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-wrap: wrap; /* Allow items to wrap */
+  }
+
+  .hamburger {
+    display: block; /* Show hamburger icon on small screens */
+  }
+
+  .nav-links {
+    flex-direction: column; /* Stack links vertically */
+    width: 100%;
+    text-align: center;
+    max-height: 0; /* Hidden by default */
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out; /* Smooth slide effect */
+    background-color: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 0;
+  }
+
+  .nav-links.open {
+    max-height: 500px; /* **UPDATED:** Increased height to accommodate all items */
+    padding-top: 10px;
+  }
+
+  .nav-links a,
+  .nav-links .btn {
+    display: block; /* Make links/buttons take full width */
+    margin: 8px 0;
+    padding: 10px 0; /* More padding for touch targets */
+  }
+
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .landing h2 {
+    font-size: 1.8rem;
+  }
+
+  .post {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .post-header h3 {
+    font-size: 1.5rem;
+  }
+
+  .post-content {
+    font-size: 1rem;
+  }
+
+  .comments-section h4 {
+    font-size: 1.2rem;
+  }
+
+  .comment-item {
+    padding: 12px;
+  }
+
+  .comment-content {
+    font-size: 0.9rem;
+  }
+
+  .comment-author {
+    font-size: 0.75rem;
+  }
+}
+
+/* Optional: Medium devices adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 20px 30px;
+  }
+  .post {
+    padding: 25px;
+  }
+}
+
+/* NEW: Comment Form Section Styles */
+.comment-form-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0; /* Subtle line to separate form */
+}
+
+.comment-form {
+  background-color: #fcfcfc;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.03);
+}
+
+.comment-form .form-group {
+  margin-bottom: 15px;
+}
+
+.comment-form label.sr-only { /* Screen reader only label */
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.comment-form textarea {
+  width: calc(100% - 20px); /* Adjust for padding */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  min-height: 80px; /* Adjust height for comments */
+  resize: vertical;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comment-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+.comment-form button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745; /* Green for comment button */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.comment-form button[type="submit"]:hover:not(:disabled) {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.comment-form button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Reusing validation/success/error message styles from above */
+/* .validation-error, .success-message, .error-message */
+.validation-error {
+  color: #dc3545; /* Red for validation errors */
+  font-size: 0.85rem;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.success-message {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green text */
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-message {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.delete:hover{
+ cursor: pointer;
+}
+
+/* Add to your landing-page.component.css */
+
+.btn-delete-post {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 15px; /* Spacing from post title/author */
+  transition: background-color 0.2s ease;
+  float: right; /* Position to the right */
+}
+
+.btn-delete-post:hover {
+  background-color: #c82333;
+}
+
+.btn-delete-comment {
+  background-color: #f0ad4e; /* Orange/Yellow for comment delete */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete-comment:hover {
+  background-color: #ec971f;
+}
+
+/* Clear float if necessary */
+.post-header::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+/* Add to your existing landing-page.component.css */
+
+/* General Action Button Styles */
+.post-actions,
+.comment-author ng-container { /* Target the container for edit/delete buttons */
+  display: inline-block; /* Keep buttons inline with text, or use flex if needed */
+  margin-left: 10px; /* Space from content */
+}
+
+/* Edit Button Styles */
+.btn-edit-post {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-right: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit-post:hover {
+  background-color: #0056b3;
+}
+
+.btn-edit-comment {
+  background-color: #6c757d; /* Grey */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit-comment:hover {
+  background-color: #5a6268;
+}
+
+/* Delete Button Styles (if not already there) */
+.btn-delete-post {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete-post:hover {
+  background-color: #c82333;
+}
+
+.btn-delete-comment {
+  background-color: #f0ad4e; /* Orange/Yellow for comment delete */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete-comment:hover {
+  background-color: #ec971f;
+}
+
+/* Cancel Button Style */
+.btn-cancel {
+  background-color: #6c757d; /* Grey */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+}
+/* Add to your existing landing-page.component.css */
+
+/* General Action Button Styles */
+.post-actions,
+.comment-author ng-container { /* Target the container for edit/delete buttons */
+  display: inline-block; /* Keep buttons inline with text, or use flex if needed */
+  margin-left: 10px; /* Space from content */
+}
+
+/* Edit Button Styles */
+.btn-edit-post {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-right: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit-post:hover {
+  background-color: #0056b3;
+}
+
+.btn-edit-comment {
+  background-color: #6c757d; /* Grey */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-edit-comment:hover {
+  background-color: #5a6268;
+}
+
+/* Delete Button Styles (if not already there) */
+.btn-delete-post {
+  background-color: #dc3545; /* Red */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete-post:hover {
+  background-color: #c82333;
+}
+
+.btn-delete-comment {
+  background-color: #f0ad4e; /* Orange/Yellow for comment delete */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-delete-comment:hover {
+  background-color: #ec971f;
+}
+
+/* Cancel Button Style */
+.btn-cancel {
+  background-color: #6c757d; /* Grey */
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-left: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268;
+}
+
+/* Styles for Edit Forms */
+.post-header form,
+.comment-item form {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+}
+
+.post-header form .form-group,
+.comment-item form .form-group {
+  margin-bottom: 10px;
+}
+
+.post-header form input[type="text"],
+.post-header form textarea,
+.comment-item form textarea {
+  width: calc(100% - 20px); /* Account for padding */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Include padding in width */
+}
+
+.post-header form textarea,
+.comment-item form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.post-header form button,
+.comment-item form button {
+  padding: 8px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.post-header form button[type="submit"],
+.comment-item form button[type="submit"] {
+  background-color: #28a745; /* Green for Save */
+  color: white;
+}
+
+.post-header form button[type="submit"]:hover,
+.comment-item form button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+.post-header form button[type="button"].btn-cancel,
+.comment-item form button[type="button"].btn-cancel {
+  background-color: #6c757d; /* Grey for Cancel */
+  color: white;
+}
+
+.post-header form button[type="button"].btn-cancel:hover,
+.comment-item form button[type="button"].btn-cancel:hover {
+  background-color: #5a6268;
+}
+
+/* Responsive adjustments for edit forms */
+@media (max-width: 768px) {
+  .post-header form,
+  .comment-item form {
+    padding: 10px;
+  }
+
+  .post-header form input[type="text"],
+  .post-header form textarea,
+  .comment-item form textarea {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .post-header form button,
+  .comment-item form button {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+/* src/app/pages/landing-page/landing-page.component.css */
+
+/* Add these styles to your existing CSS file */
+
+/* src/app/pages/landing-page/landing-page.component.css */
+.post-image-container {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.post-image {
+  max-width: 100%; /* Ensure image doesn't overflow its container */
+  height: auto;    /* Maintain aspect ratio */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

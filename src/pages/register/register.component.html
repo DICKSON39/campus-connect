@@ -1,0 +1,106 @@
+<div class="registration-container">
+  <h2>Register</h2>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="first_name">First Name:</label>
+      <input type="text" id="first_name" formControlName="first_name" />
+      <div
+        *ngIf="registrationForm.get('first_name')?.invalid && registrationForm.get('first_name')?.touched"
+        class="error-message"
+      >
+        First Name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="last_name">Last Name:</label>
+      <input type="text" id="last_name" formControlName="last_name" />
+      <div
+        *ngIf="registrationForm.get('last_name')?.invalid && registrationForm.get('last_name')?.touched"
+        class="error-message"
+      >
+        Last Name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <select id="gender" formControlName="gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <div
+        *ngIf="registrationForm.get('gender')?.invalid && registrationForm.get('gender')?.touched"
+        class="error-message"
+      >
+        Gender is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date_of_birth">Date of Birth:</label>
+      <input type="date" id="date_of_birth" formControlName="date_of_birth" />
+      <div
+        *ngIf="registrationForm.get('date_of_birth')?.invalid && registrationForm.get('date_of_birth')?.touched"
+        class="error-message"
+      >
+        Date of Birth is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" formControlName="email" />
+      <div
+        *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched"
+        class="error-message"
+      >
+        <span *ngIf="registrationForm.get('email')?.errors?.['required']"
+        >Email is required.</span
+        >
+        <span *ngIf="registrationForm.get('email')?.errors?.['email']"
+        >Enter a valid email.</span
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" formControlName="password" />
+      <div
+        *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched"
+        class="error-message"
+      >
+        <span *ngIf="registrationForm.get('password')?.errors?.['required']"
+        >Password is required.</span
+        >
+        <span *ngIf="registrationForm.get('password')?.errors?.['minlength']"
+        >Password must be at least 6 characters.</span
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="countryCode">Country Code:</label>
+      <input type="text" id="countryCode" formControlName="countryCode" />
+      <div
+        *ngIf="registrationForm.get('countryCode')?.invalid && registrationForm.get('countryCode')?.touched"
+        class="error-message"
+      >
+        Country Code is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inviteCode">Invite Code (Optional):</label>
+      <input type="text" id="inviteCode" formControlName="inviteCode" />
+    </div>
+
+    <button type="submit" [disabled]="registrationForm.invalid">Register</button>
+
+    <div *ngIf="errorMessage" class="api-error-message">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="api-success-message">{{ successMessage }}</div>
+  </form>
+</div>

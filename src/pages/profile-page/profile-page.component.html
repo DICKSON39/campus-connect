@@ -1,0 +1,66 @@
+<div class="profile-container">
+  <h2>Your Profile</h2>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
+    <div class="form-group">
+      <label for="first_name">First Name:</label>
+      <input id="first_name" type="text" formControlName="first_name" />
+      <div *ngIf="hasError('first_name', 'required')" class="validation-error">First Name is required.</div>
+      <div *ngIf="hasError('first_name', 'minlength')" class="validation-error">First Name must be at least 2 characters.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="last_name">Last Name:</label>
+      <input id="last_name" type="text" formControlName="last_name" />
+      <div *ngIf="hasError('last_name', 'required')" class="validation-error">Last Name is required.</div>
+      <div *ngIf="hasError('last_name', 'minlength')" class="validation-error">Last Name must be at least 2 characters.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input id="email" type="email" formControlName="email" />
+      <div *ngIf="hasError('email', 'required')" class="validation-error">Email is required.</div>
+      <div *ngIf="hasError('email', 'email')" class="validation-error">Please enter a valid email.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <select id="gender" formControlName="gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>        <option value="Other">Other</option>
+
+      </select>
+      <div *ngIf="hasError('gender', 'required')" class="validation-error">Gender is required.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="country_code">Country Code:</label>
+      <input id="country_code" type="number" formControlName="country_code" />
+      <div *ngIf="hasError('country_code', 'required')" class="validation-error">Country Code is required.</div>
+      <div *ngIf="hasError('country_code', 'pattern')" class="validation-error">Country Code must be digits only.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="date_of_birth">Date of Birth:</label>
+      <input id="date_of_birth" type="date" formControlName="date_of_birth" />
+      <div *ngIf="hasError('date_of_birth', 'required')" class="validation-error">Date of Birth is required.</div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-edit" (click)="toggleEditMode()">
+        {{ isEditing ? 'Cancel Edit' : 'Edit Profile' }}
+      </button>
+      <button type="submit" class="btn btn-save" *ngIf="isEditing" [disabled]="profileForm.invalid">
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>

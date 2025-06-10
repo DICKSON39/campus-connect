@@ -1,0 +1,43 @@
+<div class="admin-dashboard-container">
+  <h2>Admin Dashboard</h2>
+  <p>Welcome, Administrator! Here you can manage various aspects of CampusConnect.</p>
+
+  <div class="admin-sections">
+    <div class="section-card" *ngFor="let task of adminTasks">
+      <h3>{{ task }}</h3>
+      <p>Manage {{ task.toLowerCase() }} here.</p>
+      <button class="btn-go-to-section">Go to Section</button>
+    </div>
+  </div>
+
+  <hr> <h3 class="section-heading">Content Moderation: Posts & Comments</h3>
+
+  <div *ngIf="allPosts.length === 0" class="no-content-message">
+    <p>No posts available for moderation.</p>
+  </div>
+
+  <div class="content-list">
+    <div class="post-item" *ngFor="let post of allPosts">
+      <div class="post-header">
+        <h4>Post ID: {{ post.id }} - {{ post.title }}</h4>
+        <span class="author">By: {{ post.author.first_name }} {{ post.author.last_name }} ({{ post.author.email }})</span>
+        <button class="btn-delete-content" (click)="onDeletePost(post.id)">Delete Post</button>
+      </div>
+      <p class="post-content">{{ post.content }}</p>
+
+      <div class="comments-section-admin">
+        <h5>Comments:</h5>
+        <div *ngIf="post.comments.length === 0" class="no-comments-message-admin">
+          <p>No comments on this post.</p>
+        </div>
+        <div *ngFor="let comment of post.comments" class="comment-item-admin">
+          <p class="comment-text">Comment ID: {{ comment.id }} - {{ comment.content }}</p>
+          <span class="comment-author">By: {{ comment.commenter.first_name }} {{ comment.commenter.last_name }}</span>
+          <button class="btn-delete-content" (click)="onDeleteComment(comment.id)">Delete Comment</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-action">Perform Other Admin Action</button>
+</div>

@@ -1,0 +1,90 @@
+.registration-container {
+  max-width: 500px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.registration-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1d3557;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 0.4rem;
+  color: #2d3142;
+  font-weight: 600;
+}
+
+input,
+select {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: 0.3s ease;
+  font-size: 1rem;
+}
+
+input:focus,
+select:focus {
+  border-color: #457b9d;
+  outline: none;
+  background-color: #f1f8ff;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #1d3557;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #457b9d;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e63946;
+  font-size: 0.875rem;
+  margin-top: 0.3rem;
+}
+
+.api-error-message {
+  color: #e63946;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.api-success-message {
+  color: #2a9d8f;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
