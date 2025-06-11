@@ -823,3 +823,41 @@ body {
 .edit-post-form-container .btn-cancel:hover {
   background-color: #5a6268;
 }
+/* landing-page.component.css */
+
+/* --- CSS Spinner --- */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Space between spinner and text */
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3); /* Light border color */
+  border-top: 4px solid #fff; /* Top border color for spinning effect */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite; /* Animation definition */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Optional: Adjust button styling for spinner */
+button[type="submit"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+button[type="submit"]:disabled .spinner {
+  /* Ensure spinner color contrast if button background changes on disabled */
+  border-top: 4px solid #eee;
+}

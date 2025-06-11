@@ -109,8 +109,15 @@
               </div>
             </div>
 
-            <button type="submit" [disabled]="postEditForm.invalid">Save</button>
-            <button type="button" (click)="cancelEditPost()" class="btn-cancel">Cancel</button>
+            <button type="submit" [disabled]="postEditForm.invalid || isSavingPost">
+              <span *ngIf="!isSavingPost">Save</span>
+              <span *ngIf="isSavingPost" class="spinner-container">
+                <div class="spinner"></div> Saving...
+              </span>
+            </button>
+            <button type="button" (click)="cancelEditPost()" class="btn-cancel" [disabled]="isSavingPost">
+              Cancel
+            </button>
           </form>
         </ng-container>
 

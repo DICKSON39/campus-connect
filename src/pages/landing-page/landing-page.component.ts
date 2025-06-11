@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { PostCreationModalComponent } from '../post-creation-modal/post-creation-modal.component';
 import { MarkdownModule, MarkdownService } from 'ngx-markdown';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { finalize } from 'rxjs/operators'; // Keep this import for the loader
 
 // Extend PostsItems to include the safeContent property
 interface PostsItemsWithSafeContent extends PostsItems {
@@ -24,7 +25,6 @@ interface PostsItemsWithSafeContent extends PostsItems {
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   standalone: true,
-
   encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,
@@ -39,6 +39,8 @@ export class LandingPageComponent implements OnInit {
   posts: PostsItemsWithSafeContent[] = []; // Use the extended interface
   isMenuOpen = false;
   isAuthenticated = false;
+  isSavingPost = false; // Flag to control the loading spinner for post edits
+
   currentUserId: string | null = null;
   showPostCreationModal = false;
   currentUser: User | null = null;
@@ -64,9 +66,8 @@ export class LandingPageComponent implements OnInit {
     this.postEditForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       content: ['', [Validators.required, Validators.minLength(10)]],
-      image: [null] // New field for image
+      image: [null] // Field for image file
     });
-
 
     this.commentEditForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(2)]]
@@ -115,11 +116,6 @@ export class LandingPageComponent implements OnInit {
           };
         });
 
-        // --- NEW DEBUGGING LINE ---
-
-        // --- END NEW DEBUGGING LINE ---
-
-
         this.posts.forEach(post => {
           if (!this.commentForms[post.id]) {
             this.commentForms[post.id] = this.fb.group({
@@ -163,31 +159,40 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-
   saveEditedPost(): void {
     if (!this.editingPostId || this.postEditForm.invalid) return;
 
-    const formValue = this.postEditForm.value;
+    this.isSavingPost = true; // Set loading to true when saving starts
 
-    const formData = new FormData();
+    const formValue = this.postEditForm.value;
+    const formData = new FormData(); // Correctly create FormData instance
     formData.append('title', formValue.title);
     formData.append('content', formValue.content);
     if (formValue.image) {
       formData.append('image', formValue.image);
     }
 
-    this.PostService.updatePost(this.editingPostId, formData).subscribe({
-      next: (res) => {
-        console.log('Post updated with image:', res.message);
-        this.editingPostId = null;
-        this.loadPosts();
-      },
-      error: (error) => {
-        console.error('Error updating post:', error);
-        alert(error.error?.message || 'Failed to update post.');
-      }
-    });
+    // Pass the 'formData' instance here, not the 'FormData' class
+    this.PostService.updatePost(this.editingPostId, formData)
+      .pipe(
+        finalize(() => {
+          this.isSavingPost = false; // Set loading to false when observable completes
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          console.log('Post updated with image:', res.message);
+          this.editingPostId = null;
+          this.loadPosts();
+        },
+        error: (error) => {
+          console.error('Error updating post:', error);
+          // IMPORTANT: Replace alert with a custom modal UI in a real app
+          alert(error.error?.message || 'Failed to update post.');
+        }
+      });
   }
+
   onImageSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
@@ -195,7 +200,6 @@ export class LandingPageComponent implements OnInit {
       this.postEditForm.get('image')?.markAsDirty();
     }
   }
-
 
   cancelEditPost(): void {
     this.editingPostId = null;
