@@ -50,7 +50,7 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthServiceService {
-  private apiUrl = `http://localhost:5000/api/auth/v1`;
+  private apiUrl = `https://social-media-backend-js76.onrender.com/api/auth/v1`;
   private jwtHelper = new JwtHelperService(); // Initialize JwtHelperService
 
 
@@ -159,7 +159,7 @@ export class AuthServiceService {
 
   updateProfile(userId: string, userData: UpdateUserRequest): Observable<UpdateUserBackendResponse> {
     // Assuming your backend has a PUT endpoint like /api/auth/v1/users/:userId
-    return this.http.put<UpdateUserBackendResponse>(`http://localhost:5000/api/users/update/${userId}`, userData, {
+    return this.http.put<UpdateUserBackendResponse>(`https://social-media-backend-js76.onrender.com/api/users/update/${userId}`, userData, {
       headers: this.getAuthHeaders()
     }).pipe(
       tap(response => {

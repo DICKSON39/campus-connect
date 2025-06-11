@@ -19,8 +19,8 @@ interface SimpleSuccessResponse {
 })
 export class PostServiceService {
 
-  private apiUrl = `http://localhost:5000/api/auth/v1/posts`;
-  private commentUrl = `http://localhost:5000/api/comment`
+  private apiUrl = `https://social-media-backend-js76.onrender.com/api/auth/v1/posts`;
+  private commentUrl = `https://social-media-backend-js76.onrender.com/api/comment`
 
 
   getAuthHeaders(): HttpHeaders {
@@ -48,7 +48,7 @@ export class PostServiceService {
 
 
   createPost(postData: FormData): Observable<CreatePostBackendResponse> {
-    return this.http.post<CreatePostBackendResponse>(`http://localhost:5000/api/auth/v1/post`, postData,{
+    return this.http.post<CreatePostBackendResponse>(`https://social-media-backend-js76.onrender.com/api/auth/v1/post`, postData,{
       headers: this.getAuthHeaders(),
     });
 
@@ -67,19 +67,19 @@ export class PostServiceService {
   }
 
   deletePost(postId:number):Observable<SimpleSuccessResponse>{
-    return this.http.delete<SimpleSuccessResponse>(`http://localhost:5000/api/auth/v1/posts/${postId}`,{
+    return this.http.delete<SimpleSuccessResponse>(`https://social-media-backend-js76.onrender.com/api/auth/v1/posts/${postId}`,{
       headers:this.getAuthHeaders(),
     })
   }
   updatePost(postId:number, postData: FormData ):Observable<SimpleSuccessResponse>{
-    return this.http.put<SimpleSuccessResponse>(`http://localhost:5000/api/auth/v1/posts/${postId}`,postData,{
+    return this.http.put<SimpleSuccessResponse>(`https://social-media-backend-js76.onrender.com/api/auth/v1/posts/${postId}`,postData,{
       headers:this.getAuthHeaders(),
     })
 
   }
 
   updateComment(postId:number, commentData: CreateCommentRequest):Observable<SimpleSuccessResponse>{
-    return this.http.put<SimpleSuccessResponse>(`http://localhost:5000/api/comment/comments/${postId}`,commentData,{
+    return this.http.put<SimpleSuccessResponse>(`https://social-media-backend-js76.onrender.com/api/comment/comments/${postId}`,commentData,{
       headers:this.getAuthHeaders(),
     })
 
