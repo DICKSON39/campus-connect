@@ -15,6 +15,11 @@ export interface CommentItem {
   created_at?: string;
   commenter: PersonDetails; // Nest the commenter's details
 }
+export interface GetSinglePostBackendResponse {
+  message: string;
+  post: PostsItems; // The backend returns a single post object
+}
+
 
 // Interface for a single post item with author and comments
 export interface PostsItems {
@@ -66,5 +71,5 @@ export interface CreateCommentBackendResponse {
     // So, we'll need to reload posts to get the full commenter details.
     // For now, let's reflect what your backend actually returns.
   }
-};
+}
 

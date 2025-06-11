@@ -38,24 +38,34 @@ export class ProfilePageComponent implements OnInit {
   }
 
   loadUserProfile(): void {
-    this.currentUser = this.authService.getUser();
-    if (this.currentUser) {
-      // Patch form with current user data
-      this.profileForm.patchValue({
-        first_name: this.currentUser.first_name,
-        last_name: this.currentUser.last_name,
-        email: this.currentUser.email,
-        gender: this.currentUser.gender,
-        country_code: this.currentUser.country_code,
-        // Format date of birth for input[type="date"] if necessary
-        date_of_birth: this.currentUser.date_of_birth ?
-          new Date(this.currentUser.date_of_birth).toISOString().split('T')[0] : ''
-      });
-      this.profileForm.disable(); // Start in view mode
-    } else {
-      // If user is not found, redirect to login (or handle error)
-      this.router.navigate(['/login']);
-    }
+    this.authService.getUser().subscribe({
+      next: (user: User | null) => {
+        if (!user) {
+          this.router.navigate(['/login']);
+          return;
+        }
+
+        this.currentUser = user;
+
+        // Patch form with current user data
+        this.profileForm.patchValue({
+          first_name: user.first_name,
+          last_name: user.last_name,
+          email: user.email,
+          gender: user.gender,
+          country_code: user.country_code,
+          date_of_birth: user.date_of_birth
+            ? new Date(user.date_of_birth).toISOString().split('T')[0]
+            : ''
+        });
+
+        this.profileForm.disable(); // Start in view mode
+      },
+      error: (err) => {
+        console.error('Failed to load user:', err);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   toggleEditMode(): void {

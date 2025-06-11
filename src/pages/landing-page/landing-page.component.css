@@ -174,9 +174,12 @@ body {
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  margin-bottom: 30px;
-  padding: 30px;
+  margin-bottom: 20px; /* Reduced margin */
+  padding: 20px; /* Reduced padding */
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  max-width: 450px; /* **NEW:** Set a maximum width for the postcard */
+  margin-left: auto; /* Center the postcard if max-width is applied */
+  margin-right: auto; /* Center the postcard if max-width is applied */
 }
 
 .post:hover {
@@ -185,36 +188,49 @@ body {
 }
 
 .post-header {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
+  margin-bottom: 15px; /* Reduced margin */
+  padding-bottom: 10px; /* Reduced padding */
   border-bottom: 1px solid #eee;
 }
 
 .post-header h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem; /* Reduced font size */
   color: #007bff;
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Reduced margin */
 }
 
 .post-header .author {
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* Reduced font size */
   color: #777;
-  margin-bottom: 5px;
+  margin-bottom: 3px; /* Reduced margin */
 }
 
 .post-header .author .email {
-  font-size: 0.8rem;
+  font-size: 0.75rem; /* Reduced font size */
   color: #999;
 }
 
 .post-content {
-  font-size: 1.1rem;
+  font-size: 1rem; /* Reduced font size */
   color: #444;
-  margin-bottom: 25px;
+  margin-bottom: 20px; /* Reduced margin */
   white-space: pre-wrap; /* Preserves whitespace and line breaks */
   word-wrap: break-word; /* Breaks long words */
+  /* border: 2px dashed red; /* TEMPORARY: Visual debug for content container */
+  box-sizing: border-box; /* Ensures padding/border are included in width */
 }
+
+/* Styles for images within the post content */
+.post-content img {
+  max-width: 80%; /* Reduced max-width for images within the post */
+  height: auto;    /* Maintain aspect ratio */
+  display: block;  /* Ensures it takes up its own line and allows margin auto */
+  margin: 10px auto; /* Reduced margin */
+  border-radius: 6px; /* Slightly smaller border-radius */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
 
 /* --- Comments Section --- */
 .comments-section {
@@ -324,16 +340,21 @@ body {
   }
 
   .post {
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 15px; /* Further reduced padding on small screens */
+    margin-bottom: 15px; /* Further reduced margin on small screens */
+    max-width: 95%; /* Adjust max-width for very small screens */
   }
 
   .post-header h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem; /* Even smaller font on mobile */
   }
 
   .post-content {
-    font-size: 1rem;
+    font-size: 0.95rem; /* Even smaller font on mobile */
+  }
+
+  .post-content img {
+    max-width: 90%; /* Allow images to be slightly larger on smaller screens to fill space better */
   }
 
   .comments-section h4 {
@@ -468,7 +489,7 @@ body {
 }
 
 .delete:hover{
- cursor: pointer;
+  cursor: pointer;
 }
 
 /* Add to your landing-page.component.css */
@@ -514,96 +535,6 @@ body {
 }
 
 
-/* Add to your existing landing-page.component.css */
-
-/* General Action Button Styles */
-.post-actions,
-.comment-author ng-container { /* Target the container for edit/delete buttons */
-  display: inline-block; /* Keep buttons inline with text, or use flex if needed */
-  margin-left: 10px; /* Space from content */
-}
-
-/* Edit Button Styles */
-.btn-edit-post {
-  background-color: #007bff; /* Blue */
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin-right: 10px;
-  transition: background-color 0.2s ease;
-}
-
-.btn-edit-post:hover {
-  background-color: #0056b3;
-}
-
-.btn-edit-comment {
-  background-color: #6c757d; /* Grey */
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  margin-left: 10px;
-  transition: background-color 0.2s ease;
-}
-
-.btn-edit-comment:hover {
-  background-color: #5a6268;
-}
-
-/* Delete Button Styles (if not already there) */
-.btn-delete-post {
-  background-color: #dc3545; /* Red */
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: background-color 0.2s ease;
-}
-
-.btn-delete-post:hover {
-  background-color: #c82333;
-}
-
-.btn-delete-comment {
-  background-color: #f0ad4e; /* Orange/Yellow for comment delete */
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 0.75rem;
-  margin-left: 10px;
-  transition: background-color 0.2s ease;
-}
-
-.btn-delete-comment:hover {
-  background-color: #ec971f;
-}
-
-/* Cancel Button Style */
-.btn-cancel {
-  background-color: #6c757d; /* Grey */
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  margin-left: 10px;
-  transition: background-color 0.2s ease;
-}
-
-.btn-cancel:hover {
-  background-color: #5a6268;
-}
 /* Add to your existing landing-page.component.css */
 
 /* General Action Button Styles */
@@ -785,18 +716,110 @@ body {
 
 /* src/app/pages/landing-page/landing-page.component.css */
 
-/* Add these styles to your existing CSS file */
+/* Removed .post-image-container as images are handled by .post-content img */
 
-/* src/app/pages/landing-page/landing-page.component.css */
-.post-image-container {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  text-align: center;
+/* Styles for image directly within .post-content, ensure these are effective */
+/*.post-content img {*/
+/* max-width: 100%; !* Ensure image doesn't overflow its container *!*/
+/* height: auto;    !* Maintain aspect ratio *!*/
+/* display: block;  !* Ensures it takes up its own line and allows margin auto *!*/
+/* margin: 15px auto; !* Add vertical margin and center horizontally *!*/
+/* border-radius: 8px; !* Rounded corners for images *!*/
+/* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); !* Subtle shadow for depth *!*/
+/*}*/
+.post-image  {
+  max-width: 50%; /* Further reduced for this specific rule if it's outside .post-content */
+  height: 300px; /* Reduced height */
+  display: block;
+  margin: 0.8rem auto; /* Reduced margin */
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-.post-image {
-  max-width: 100%; /* Ensure image doesn't overflow its container */
-  height: auto;    /* Maintain aspect ratio */
+.edit-post-form-container {
+  max-width: 50%;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-post-form-container .form-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-post-form-container label {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.edit-post-form-container input[type="text"],
+.edit-post-form-container textarea {
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: border 0.2s ease-in-out;
+}
+
+.edit-post-form-container input[type="text"]:focus,
+.edit-post-form-container textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.edit-post-form-container input[type="file"] {
+  margin-top: 0.5rem;
+}
+
+.edit-post-form-container .validation-error {
+  color: #e74c3c;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.edit-post-form-container .preview-img {
+  max-width: 100%;
+  max-height: 300px;
+  display: block;
+  margin: 0.8rem auto;
+  border-radius: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-post-form-container button[type="submit"] {
+  padding: 0.7rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-post-form-container button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.edit-post-form-container .btn-cancel {
+  padding: 0.7rem 1.5rem;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-post-form-container .btn-cancel:hover {
+  background-color: #5a6268;
 }

@@ -1,4 +1,3 @@
-// src/app/guards/auth.guard.ts
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
@@ -6,8 +5,9 @@ import {
   RouterStateSnapshot,
   Router,
 } from '@angular/router';
-import { AuthServiceService, User } from '../services/auth-service.service'; // Import User interface
-
+import { Observable, of } from 'rxjs';
+import { AuthServiceService, User } from '../services/auth-service.service';
+import { map, catchError, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -21,40 +21,44 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
-  ): boolean {
+  ): Observable<boolean> {
     const isAuth = this.authService.isAuthenticated();
     const token = this.authService.getToken();
 
-    // Get expected roles from route data
-    // Ensure route.data['roles'] is an array of numbers (if role_id is number)
-    const expectedRoles: number[] = route.data['roles'];
-    const user: User | null = this.authService.getUser(); // Get current user as User type
-
-    // 1. Check if user is authenticated and token is valid
+    // 1. Check if user is not authenticated or token is expired
     if (!isAuth || (token && this.authService.isTokenExpired(token))) {
-      console.warn('AuthGuard: User not authenticated or token expired. Redirecting to login.');
-      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } }); // Redirect to login
-      return false;
+      console.warn('AuthGuard: Not authenticated or token expired.');
+      this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+      return of(false);
     }
 
-    // 2. If expectedRoles are defined, check if user has the required role
-    if (expectedRoles && expectedRoles.length > 0) {
-      if (!user) {
-        console.warn('AuthGuard: User object not found for role check. Redirecting to login.');
+    // 2. Get expected roles from route
+    const expectedRoles: number[] = route.data['roles'];
+
+    // 3. Get the user from observable
+    return this.authService.getUser().pipe(
+      map((user: User | null) => {
+        if (!user) {
+          console.warn('AuthGuard: No user found.');
+          this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+          return false;
+        }
+
+        if (expectedRoles && expectedRoles.length > 0) {
+          if (!expectedRoles.includes(user.role_id)) {
+            console.warn(`AuthGuard: Role ID ${user.role_id} not authorized. Expected roles: ${expectedRoles}`);
+            this.router.navigate(['/']); // Redirect to home or unauthorized page
+            return false;
+          }
+        }
+
+        return true;
+      }),
+      catchError((err) => {
+        console.error('AuthGuard: Error fetching user.', err);
         this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
-        return false;
-      }
-
-      // Check if the user's role_id is included in the expectedRoles array
-      if (!expectedRoles.includes(user.role_id)) {
-        console.warn(`AuthGuard: User role (ID: ${user.role_id}) not authorized for this route. Expected roles: ${expectedRoles}.`);
-        this.router.navigate(['/']); // Redirect to a default unathorized page or home
-        return false;
-      }
-    }
-
-    // If all checks pass
-    return true;
+        return of(false);
+      })
+    );
   }
 }
-

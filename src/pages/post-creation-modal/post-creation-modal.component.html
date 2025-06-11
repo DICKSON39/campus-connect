@@ -4,7 +4,9 @@
       <h2>Create New Post</h2>
       <button class="close-button" (click)="onClose()">×</button>
     </div>
+
     <div class="modal-body">
+      <!-- Error and Success Messages -->
       <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
@@ -12,7 +14,9 @@
         {{ successMessage }}
       </div>
 
+      <!-- Post Form -->
       <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+        <!-- Title -->
         <div class="form-group">
           <label for="postTitle" class="sr-only">Post Title</label>
           <input
@@ -24,14 +28,12 @@
           <div *ngIf="hasError('title', 'required')" class="validation-error">
             Title is required.
           </div>
-          <div
-            *ngIf="hasError('title', 'minlength')"
-            class="validation-error"
-          >
+          <div *ngIf="hasError('title', 'minlength')" class="validation-error">
             Title must be at least 3 characters.
           </div>
         </div>
 
+        <!-- Content -->
         <div class="form-group">
           <label for="postContent" class="sr-only">Post Content</label>
           <textarea
@@ -43,14 +45,12 @@
           <div *ngIf="hasError('content', 'required')" class="validation-error">
             Content is required.
           </div>
-          <div
-            *ngIf="hasError('content', 'minlength')"
-            class="validation-error"
-          >
+          <div *ngIf="hasError('content', 'minlength')" class="validation-error">
             Content must be at least 10 characters.
           </div>
         </div>
 
+        <!-- Image Upload -->
         <div class="form-group image-upload-section">
           <label for="imageUpload" class="image-upload-label">
             <input
@@ -64,12 +64,28 @@
             <span *ngIf="isUploadingImage">Uploading...</span>
             <span *ngIf="isUploadingImage" class="loader"></span>
           </label>
-          <div *ngIf="imageUrl" class="uploaded-image-preview">
-            <img [src]="imageUrl" alt="Uploaded Image" />
-            <button type="button" class="remove-image-button" (click)="removeImage()">Remove Image</button>
+
+          <!-- Preview -->
+          <div *ngIf="selectedImageFile" class="uploaded-image-preview">
+            <img
+              *ngIf="previewUrl" [src]="previewUrl" alt="Selected Image Preview"
+              alt="Selected Image Preview"
+            />
+            <button
+              type="button"
+              class="remove-image-button"
+              (click)="selectedImageFile = null"
+            >
+              Remove Image
+            </button>
           </div>
         </div>
-        <button type="submit" [disabled]="postForm.invalid || isUploadingImage">
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          [disabled]="postForm.invalid || isUploadingImage"
+        >
           Create Post
         </button>
       </form>

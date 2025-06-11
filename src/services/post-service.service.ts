@@ -7,7 +7,7 @@ import {
   CreatePostBackendResponse,
   GetPostsBackendResponse,
   PostsItems,
-  CreatePostRequest
+  CreatePostRequest, GetSinglePostBackendResponse
 } from '../app/interface/post.interface';
 
 interface SimpleSuccessResponse {
@@ -34,7 +34,20 @@ export class PostServiceService {
     return this.http.get<GetPostsBackendResponse>(`${this.apiUrl}`)
 }
 
-  createPost(postData: CreatePostRequest): Observable<CreatePostBackendResponse> {
+  getMyPost():Observable<GetPostsBackendResponse>{
+    return this.http.get<GetPostsBackendResponse>(`${this.apiUrl}/my-posts,{
+    headers: this.getAuthHeaders()
+    }`)
+
+  }
+  getPostById(postId: number): Observable<GetSinglePostBackendResponse> {
+    return this.http.get<GetSinglePostBackendResponse>(`${this.apiUrl}/${postId}`, {
+      headers: this.getAuthHeaders(), // Assuming this endpoint requires authentication
+    });
+  }
+
+
+  createPost(postData: FormData): Observable<CreatePostBackendResponse> {
     return this.http.post<CreatePostBackendResponse>(`http://localhost:5000/api/auth/v1/post`, postData,{
       headers: this.getAuthHeaders(),
     });
@@ -58,7 +71,7 @@ export class PostServiceService {
       headers:this.getAuthHeaders(),
     })
   }
-  updatePost(postId:number, postData: CreatePostRequest ):Observable<SimpleSuccessResponse>{
+  updatePost(postId:number, postData: FormData ):Observable<SimpleSuccessResponse>{
     return this.http.put<SimpleSuccessResponse>(`http://localhost:5000/api/auth/v1/posts/${postId}`,postData,{
       headers:this.getAuthHeaders(),
     })
@@ -71,5 +84,6 @@ export class PostServiceService {
     })
 
   }
+
 
 }

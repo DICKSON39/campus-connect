@@ -1,63 +1,73 @@
-// src/pages/landing-page/landing-page.component.ts
-
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { AuthServiceService } from '../../services/auth-service.service';
+import { AuthServiceService, User } from '../../services/auth-service.service';
 import { PostServiceService } from '../../services/post-service.service';
 import {
   PostsItems,
   GetPostsBackendResponse,
   CreateCommentRequest,
-  CreateCommentBackendResponse, CommentItem
+  CreateCommentBackendResponse,
+  CommentItem
 } from '../../app/interface/post.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {PostCreationModalComponent} from '../post-creation-modal/post-creation-modal.component';
-import {User} from  '../../services/auth-service.service'
+import { PostCreationModalComponent } from '../post-creation-modal/post-creation-modal.component';
+import { MarkdownModule, MarkdownService } from 'ngx-markdown';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-
-
+// Extend PostsItems to include the safeContent property
+interface PostsItemsWithSafeContent extends PostsItems {
+  safeContent?: SafeHtml; // Optional, as it's generated on the fly
+}
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, PostCreationModalComponent],
+
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    PostCreationModalComponent,
+    MarkdownModule
+  ],
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  posts: PostsItems[] = [];
-  isMenuOpen: boolean = false;
+  posts: PostsItemsWithSafeContent[] = []; // Use the extended interface
+  isMenuOpen = false;
   isAuthenticated = false;
   currentUserId: string | null = null;
-  showPostCreationModal: boolean = false;
-  currentUser:User | null = null;
+  showPostCreationModal = false;
+  currentUser: User | null = null;
 
   commentForms: { [postId: number]: FormGroup } = {};
   commentErrorMessages: { [postId: number]: string | null } = {};
   commentSuccessMessages: { [postId: number]: string | null } = {};
 
-  // NEW: State for editing posts
   editingPostId: number | null = null;
-  postEditForm: FormGroup; // Single form for editing posts
+  postEditForm: FormGroup;
 
-  // NEW: State for editing comments
   editingCommentId: number | null = null;
-  commentEditForm: FormGroup; // Single form for editing comments
-
+  commentEditForm: FormGroup;
 
   constructor(
     private AuthService: AuthServiceService,
     private router: Router,
     private PostService: PostServiceService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private markdownService: MarkdownService,
+    private sanitizer: DomSanitizer
   ) {
-    // Initialize post edit form
     this.postEditForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
-      content: ['', [Validators.required, Validators.minLength(10)]]
+      content: ['', [Validators.required, Validators.minLength(10)]],
+      image: [null] // New field for image
     });
-    // Initialize comment edit form
+
+
     this.commentEditForm = this.fb.group({
       content: ['', [Validators.required, Validators.minLength(2)]]
     });
@@ -65,17 +75,51 @@ export class LandingPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.isAuthenticated = this.AuthService.isAuthenticated();
+
     if (this.isAuthenticated) {
-      this.currentUserId = this.AuthService.getUserId();
-      this.currentUser = this.AuthService.getUser();
+      this.AuthService.getUserId().subscribe({
+        next: (userId: string | null) => {
+          this.currentUserId = userId;
+        },
+        error: (err) => {
+          console.error('Error loading user ID:', err);
+          this.AuthService.logout();
+          this.router.navigate(['/login']);
+        }
+      });
+
+      this.AuthService.getUser().subscribe({
+        next: (user: User | null) => {
+          this.currentUser = user;
+          console.log('Current user loaded:', this.currentUser);
+        },
+        error: (err) => {
+          console.error('Error loading current user:', err);
+          this.AuthService.logout();
+          this.router.navigate(['/login']);
+        }
+      });
     }
+
     this.loadPosts();
   }
 
   loadPosts(): void {
     this.PostService.getPosts().subscribe({
       next: (response: GetPostsBackendResponse) => {
-        this.posts = response.posts;
+        this.posts = response.posts.map(post => {
+          const renderedHtml = this.markdownService.parse(post.content);
+          return {
+            ...post,
+            safeContent: this.sanitizer.bypassSecurityTrustHtml(<string>renderedHtml)
+          };
+        });
+
+        // --- NEW DEBUGGING LINE ---
+
+        // --- END NEW DEBUGGING LINE ---
+
+
         this.posts.forEach(post => {
           if (!this.commentForms[post.id]) {
             this.commentForms[post.id] = this.fb.group({
@@ -84,10 +128,22 @@ export class LandingPageComponent implements OnInit {
           }
         });
       },
-      error: err => {
-        console.error('Error fetching posts:', err);
-      }
+      error: err => console.error('Error fetching posts:', err)
     });
+  }
+
+  // Helper function for template debugging (can be removed after fix)
+  getType(value: any): string {
+    return typeof value;
+  }
+
+  // Optional: Add a trackBy function for *ngFor performance
+  trackByPostId(index: number, post: PostsItems): number {
+    return post.id;
+  }
+
+  trackByCommentId(index: number, comment: CommentItem): number {
+    return comment.id;
   }
 
   isPostAuthor(authorId: string): boolean {
@@ -98,25 +154,33 @@ export class LandingPageComponent implements OnInit {
     return this.isAuthenticated && this.currentUserId === commenterId;
   }
 
-  // NEW: Start editing a post
   startEditPost(post: PostsItems): void {
     this.editingPostId = post.id;
     this.postEditForm.patchValue({
       title: post.title,
-      content: post.content
+      content: post.content,
+      image: null // Clear image field; file inputs can't be patched with existing data
     });
   }
 
-  // NEW: Save edited post
+
   saveEditedPost(): void {
-    if (!this.editingPostId || this.postEditForm.invalid) {
-      return;
+    if (!this.editingPostId || this.postEditForm.invalid) return;
+
+    const formValue = this.postEditForm.value;
+
+    const formData = new FormData();
+    formData.append('title', formValue.title);
+    formData.append('content', formValue.content);
+    if (formValue.image) {
+      formData.append('image', formValue.image);
     }
-    this.PostService.updatePost(this.editingPostId, this.postEditForm.value).subscribe({
-      next: (response) => {
-        console.log('Post updated successfully:', response.message);
-        this.editingPostId = null; // Exit edit mode
-        this.loadPosts(); // Reload posts to show updated content
+
+    this.PostService.updatePost(this.editingPostId, formData).subscribe({
+      next: (res) => {
+        console.log('Post updated with image:', res.message);
+        this.editingPostId = null;
+        this.loadPosts();
       },
       error: (error) => {
         console.error('Error updating post:', error);
@@ -124,75 +188,77 @@ export class LandingPageComponent implements OnInit {
       }
     });
   }
+  onImageSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.postEditForm.patchValue({ image: file });
+      this.postEditForm.get('image')?.markAsDirty();
+    }
+  }
 
-  // NEW: Cancel post editing
+
   cancelEditPost(): void {
     this.editingPostId = null;
     this.postEditForm.reset();
   }
 
-  // NEW: Start editing a comment
   startEditComment(comment: CommentItem): void {
     this.editingCommentId = comment.id;
-    this.commentEditForm.patchValue({
-      content: comment.content
-    });
+    this.commentEditForm.patchValue({ content: comment.content });
   }
 
-  // NEW: Save edited comment
   saveEditedComment(): void {
-    if (!this.editingCommentId || this.commentEditForm.invalid) {
-      return;
-    }
+    if (!this.editingCommentId || this.commentEditForm.invalid) return;
+
     this.PostService.updateComment(this.editingCommentId, this.commentEditForm.value).subscribe({
-      next: (response) => {
-        console.log('Comment updated successfully:', response.message);
-        this.editingCommentId = null; // Exit edit mode
-        this.loadPosts(); // Reload posts to show updated content
+      next: (res) => {
+        console.log('Comment updated successfully:', res.message);
+        this.editingCommentId = null;
+        this.loadPosts();
       },
       error: (error) => {
         console.error('Error updating comment:', error);
+        // IMPORTANT: Replace alert with a custom modal UI in a real app
         alert(error.error?.message || 'Failed to update comment.');
       }
     });
   }
 
-  // NEW: Cancel comment editing
   cancelEditComment(): void {
     this.editingCommentId = null;
     this.commentEditForm.reset();
   }
 
   onDeletePost(postId: number): void {
-    if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
-      return;
-    }
+    // IMPORTANT: Replace confirm with a custom modal UI in a real app
+    if (!confirm('Are you sure you want to delete this post?')) return;
 
     this.PostService.deletePost(postId).subscribe({
-      next: (response) => {
-        console.log('Post deleted successfully:', response.message);
+      next: (res) => {
+        console.log('Post deleted:', res.message);
         this.loadPosts();
       },
-      error: (error) => {
-        console.error('Error deleting post:', error);
-        alert(error.error?.message || 'Failed to delete post.');
+      error: (err) => {
+        console.error('Delete post error:', err);
+        // IMPORTANT: Replace alert with a custom modal UI in a real app
+        alert(err.error?.message || 'Error deleting post.');
       }
     });
   }
 
   onDeleteComment(commentId: number): void {
-    if (!confirm('Are you sure you want to delete this comment?')) {
-      return;
-    }
+    // IMPORTANT: Replace confirm with a custom modal UI in a real app
+    if (!confirm('Are you sure you want to delete this comment?')) return;
 
     this.PostService.deleteComment(commentId).subscribe({
-      next: (response) => {
-        console.log('Comment deleted successfully:', response.message);
+      next: (res) => {
+        console.log('Comment deleted:', res.message);
         this.loadPosts();
       },
-      error: (error) => {
-        console.error('Error deleting comment:', error);
-        alert(error.error?.message || 'Failed to delete comment.');
+      error: (err) => {
+        console.error('Delete comment error:', err);
+        // IMPORTANT: Replace alert with a custom modal UI in a real app
+        alert(err.error?.message || 'Error deleting comment.');
       }
     });
   }
@@ -201,6 +267,7 @@ export class LandingPageComponent implements OnInit {
     if (this.isAuthenticated) {
       this.showPostCreationModal = true;
     } else {
+      // IMPORTANT: Replace alert with a custom message box in a real app
       alert('Please log in to create a post.');
       this.router.navigate(['/login']);
     }
@@ -220,10 +287,7 @@ export class LandingPageComponent implements OnInit {
     this.commentErrorMessages[postId] = null;
     this.commentSuccessMessages[postId] = null;
 
-    if (!commentForm) {
-      console.error('Comment form not found for post ID:', postId);
-      return;
-    }
+    if (!commentForm) return;
 
     if (!this.isAuthenticated) {
       this.commentErrorMessages[postId] = 'You must be logged in to comment.';
@@ -231,7 +295,7 @@ export class LandingPageComponent implements OnInit {
     }
 
     if (commentForm.invalid) {
-      this.commentErrorMessages[postId] = 'Comment cannot be empty and must be at least 2 characters.';
+      this.commentErrorMessages[postId] = 'Comment must be at least 2 characters.';
       commentForm.markAllAsTouched();
       return;
     }
@@ -239,8 +303,8 @@ export class LandingPageComponent implements OnInit {
     const commentData: CreateCommentRequest = commentForm.value;
 
     this.PostService.makeComment(postId, commentData).subscribe({
-      next: (response: CreateCommentBackendResponse) => {
-        this.commentSuccessMessages[postId] = response.message;
+      next: (res: CreateCommentBackendResponse) => {
+        this.commentSuccessMessages[postId] = res.message;
         commentForm.reset();
         commentForm.markAsUntouched();
         commentForm.markAsPristine();
@@ -248,7 +312,7 @@ export class LandingPageComponent implements OnInit {
         setTimeout(() => this.commentSuccessMessages[postId] = null, 3000);
       },
       error: (error) => {
-        this.commentErrorMessages[postId] = error.error?.message || 'Failed to post comment. Please try again.';
+        this.commentErrorMessages[postId] = error.error?.message || 'Failed to post comment.';
         console.error('Error posting comment:', error);
         setTimeout(() => this.commentErrorMessages[postId] = null, 5000);
       }
@@ -259,38 +323,34 @@ export class LandingPageComponent implements OnInit {
     return this.commentForms[postId];
   }
 
-  hasCommentError(postId: number, controlName: string, errorType: string): boolean | undefined {
+  hasCommentError(postId: number, controlName: string, errorType: string): boolean {
     const form = this.commentForms[postId];
-    if (!form) return false;
-    const control = form.get(controlName);
-    return control?.touched && control?.hasError(errorType);
+    return form?.get(controlName)?.touched && form.get(controlName)?.hasError(errorType) || false;
   }
 
-  // NEW: Helper for post edit form validation
-  hasPostEditError(controlName: string, errorType: string): boolean | undefined {
+  hasPostEditError(controlName: string, errorType: string): boolean {
     const control = this.postEditForm.get(controlName);
-    return control?.touched && control?.hasError(errorType);
+    return control?.touched && control?.hasError(errorType) || false;
   }
 
-  // NEW: Helper for comment edit form validation
-  hasCommentEditError(controlName: string, errorType: string): boolean | undefined {
+  hasCommentEditError(controlName: string, errorType: string): boolean {
     const control = this.commentEditForm.get(controlName);
-    return control?.touched && control?.hasError(errorType);
+    return control?.touched && control?.hasError(errorType) || false;
   }
 
-
-  isAdmin():boolean{
+  isAdmin(): boolean {
     return this.isAuthenticated && this.currentUser?.role_id === 1;
   }
 
-
-  toggleMenu() {
+  toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  logout() {
+  logout(): void {
     this.AuthService.logout();
     this.isAuthenticated = false;
-    this.router.navigate(['']);
+    this.currentUser = null;
+    this.currentUserId = null;
+    this.router.navigate(['/login']);
   }
 }

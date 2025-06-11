@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import {map, Observable, of, tap} from 'rxjs';
 
 import { JwtHelperService } from '@auth0/angular-jwt'; // Make sure you have this installed: npm install @auth0/angular-jwt
 
@@ -64,10 +64,10 @@ export class AuthServiceService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getUser(): User | null {
+  getUser(): Observable<User | null> {
     const userString = localStorage.getItem('user');
-    // Ensure the parsed user ID is a string for consistency with your backend/interfaces
-    return userString ? JSON.parse(userString) as User : null;
+    const user = userString ? JSON.parse(userString) as User : null;
+    return of(user);
   }
 
   getToken(): string | null {
@@ -75,9 +75,10 @@ export class AuthServiceService {
   }
 
   // NEW: Method to get the current user's ID
-  getUserId(): string | null {
-    const user = this.getUser();
-    return user ? user.id : null; // Directly return the 'id' from the stored User object
+  getUserId(): Observable<string | null> {
+    return this.getUser().pipe(
+      map(user => user ? user.id : null)
+    );
   }
 
   isAuthenticated(): boolean {

@@ -9,21 +9,35 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000; /* Higher than navbar */
-  animation: fadeIn 0.3s ease-out; /* Fade in animation */
+  z-index: 1001; /* Ensure it's above other content and navbar */
+  backdrop-filter: blur(5px); /* Optional: adds a blur effect to content behind */
 }
 
-/* Modal Content */
+/* Modal Content Box */
 .modal-content {
   background-color: #ffffff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
-  width: 90%;
-  max-width: 600px; /* Limit width for larger screens */
-  transform: translateY(-20px); /* Slightly move up for slide-in effect */
-  animation: slideIn 0.3s ease-out forwards; /* Slide in animation */
-  position: relative; /* For close button positioning */
+  border-radius: 12px; /* Softer rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* More pronounced shadow */
+  width: 90%; /* Responsive width */
+  max-width: 600px; /* Maximum width for larger screens */
+  transform: translateY(-20px); /* Slight initial lift for animation */
+  opacity: 0; /* Hidden by default for fade-in animation */
+  animation: modal-fade-in 0.3s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: flex;
+  flex-direction: column; /* Stack header, body */
+  max-height: 90vh; /* Limit height for very tall forms */
+  overflow: hidden; /* Hide overflow content initially */
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Modal Header */
@@ -31,226 +45,295 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  padding: 20px 25px; /* Ample padding */
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f7f7f7; /* Light background for header */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
 .modal-header h2 {
-  font-size: 2rem;
-  color: #007bff;
   margin: 0;
+  font-size: 1.6rem; /* Clear title size */
+  color: #333;
 }
 
 .close-button {
   background: none;
   border: none;
-  font-size: 2.5rem;
+  font-size: 2rem; /* Large and clear close button */
   color: #888;
   cursor: pointer;
-  padding: 0;
-  line-height: 1;
-  transition: color 0.2s ease;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .close-button:hover {
-  color: #333;
-}
-
-/* Form Styles (reused from previous post form CSS) */
-.post-form .form-group {
-  margin-bottom: 20px;
-}
-
-.post-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
   color: #555;
+  background-color: #e9e9e9;
 }
 
-.post-form input[type="text"],
-.post-form textarea {
-  width: calc(100% - 20px); /* Adjust for padding */
-  padding: 12px 10px;
+/* Modal Body */
+.modal-body {
+  padding: 25px;
+  overflow-y: auto; /* Enable scrolling for long forms */
+  flex-grow: 1; /* Allow body to take available space */
+}
+
+/* Form Grouping */
+.form-group {
+  margin-bottom: 20px; /* Spacing between form elements */
+}
+
+/* Labels (Screen Reader Only for Input/Textarea, adjust if you want visible labels) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Input and Textarea Base Styles */
+.modal-body input[type="text"],
+.modal-body textarea {
+  width: calc(100% - 24px); /* Full width minus padding */
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 6px;
+  border-radius: 8px; /* Slightly more rounded */
   font-size: 1rem;
   color: #333;
+  box-sizing: border-box; /* Include padding in element's total width */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.post-form textarea {
-  min-height: 120px; /* Make textarea taller */
+.modal-body textarea {
+  min-height: 120px; /* Ample height for content */
   resize: vertical; /* Allow vertical resizing */
 }
 
-.post-form input:focus,
-.post-form textarea:focus {
+.modal-body input[type="text"]::placeholder,
+.modal-body textarea::placeholder {
+  color: #999;
+}
+
+.modal-body input[type="text"]:focus,
+.modal-body textarea:focus {
   border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Light blue focus halo */
   outline: none;
 }
 
-.post-form button[type="submit"] {
-  width: 100%;
-  padding: 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-top: 10px;
+/* Validation Errors */
+.validation-error {
+  color: #dc3545; /* Red */
+  font-size: 0.85rem;
+  margin-top: 5px;
 }
 
-.post-form button[type="submit"]:hover:not(:disabled) {
+/* Success and Error Messages (from your existing CSS) */
+.error-message {
+  background-color: #f8d7da; /* Light red */
+  color: #721c24; /* Dark red text */
+  border: 1px solid #f5c6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px; /* Space from form */
+  text-align: center;
+  font-weight: 500;
+}
+
+.success-message {
+  background-color: #d4edda; /* Light green */
+  color: #155724; /* Dark green text */
+  border: 1px solid #c3e6cb;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 20px; /* Space from form */
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Image Upload Section */
+.image-upload-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.image-upload-label {
+  display: inline-block;
+  background-color: #007bff; /* Primary blue for upload button */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  overflow: hidden; /* Hide default input */
+  position: relative;
+}
+
+.image-upload-label:hover {
   background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.image-upload-label input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.image-upload-label input[type="file"]:disabled + span {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loader for Uploading State */
+.image-upload-label .loader {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Uploaded Image Preview */
+.uploaded-image-preview {
+  margin-top: 15px;
+  border: 1px dashed #e0e0e0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.uploaded-image-preview img {
+  max-width: 100%;
+  max-height: 150px; /* Limit preview image height */
+  border-radius: 6px;
+  margin-bottom: 10px;
+  object-fit: contain; /* Ensure the image fits within the bounds */
+}
+
+.remove-image-button {
+  background-color: #dc3545; /* Red for remove */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.remove-image-button:hover {
+  background-color: #c82333;
+}
+
+/* Submit Button */
+.modal-body button[type="submit"] {
+  display: block; /* Full width button */
+  width: 100%;
+  padding: 15px;
+  background-color: #28a745; /* Green for submit */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 20px; /* Space above button */
+}
+
+.modal-body button[type="submit"]:hover:not(:disabled) {
+  background-color: #218838;
   transform: translateY(-2px);
 }
 
-.post-form button[type="submit"]:disabled {
+.modal-body button[type="submit"]:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.success-message {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-  padding: 12px;
-  border-radius: 6px;
-  margin-top: 20px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.error-message {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-  padding: 12px;
-  border-radius: 6px;
-  margin-top: 20px;
-  text-align: center;
-  font-weight: 500;
-}
-
-.validation-error {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 5px;
-  text-align: left;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* Responsive */
+/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
   .modal-content {
+    width: 95%; /* Wider on smaller screens */
+    margin: 20px; /* Add some margin from edges */
+  }
+
+  .modal-header {
+    padding: 15px 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .close-button {
+    font-size: 1.8rem;
+    padding: 3px 8px;
+  }
+
+  .modal-body {
     padding: 20px;
   }
-  .modal-header h2 {
-    font-size: 1.5rem;
+
+  .modal-body input[type="text"],
+  .modal-body textarea {
+    padding: 10px;
+    font-size: 0.95rem;
   }
-  .close-button {
-    font-size: 2rem;
+
+  .modal-body textarea {
+    min-height: 100px; /* Slightly smaller height on mobile */
+  }
+
+  .image-upload-label {
+    padding: 8px 15px;
+    font-size: 0.95rem;
+  }
+
+  .remove-image-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .modal-body button[type="submit"] {
+    padding: 12px;
+    font-size: 1rem;
   }
 }
 
-/* Add this to your landing-page.component.css */
-
-.nav-links .btn.primary {
-  background-color: #17a2b8; /* A nice light blue/teal */
-  color: white;
-}
-
-.nav-links .btn.primary:hover {
-  background-color: #138496;
-}
-
-/* Add to your existing post-creation-modal.component.css */
-
-.image-upload-section {
-  margin-top: 20px;
-  border: 1px dashed #ccc;
-  padding: 15px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.image-upload-label {
-  display: inline-block;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-.image-upload-label:hover {
-  background-color: #0056b3;
-}
-
-.image-upload-label input[type="file"] {
-  display: none; /* Hide the default file input */
-}
-
-.loader {
-  border: 4px solid #f3f3f3; /* Light grey */
-  border-top: 4px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 10px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.uploaded-image-preview {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.uploaded-image-preview img {
-  max-width: 100%;
-  max-height: 200px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-}
-
-.remove-image-button {
-  background-color: #dc3545; /* Red */
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.3s ease;
-}
-
-.remove-image-button:hover {
-  background-color: #c82333;
+@media (max-width: 480px) {
+  .modal-content {
+    border-radius: 8px; /* Even tighter radius on very small screens */
+  }
 }
