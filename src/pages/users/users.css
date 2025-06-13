@@ -1,0 +1,455 @@
+/* Variables for easier theme management */
+:root {
+  --primary-bg: rgba(
+    30,
+    41,
+    59,
+    0.9
+  ); /* Slightly less translucent, darker base */
+  --primary-text: #f8fafc; /* Off-white, slightly warmer text */
+  --accent-blue: #81d4fa; /* Light cyan/blue */
+  --light-blue: #e0f2fe; /* Very light blue for titles */
+  --success-green: #16a34a;
+  --error-red: #dc2626;
+  --hover-bg-alpha: 0.07; /* Alpha for hover backgrounds */
+  --border-alpha: 0.2; /* Alpha for borders */
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --input-bg: #f8fafc;
+  --input-border: #b0bec5;
+  --input-text: #2d3748;
+}
+
+/* User List Container */
+.user-list-container {
+  background: var(--primary-bg);
+  color: var(--primary-text);
+  padding: 2.5em; /* Increased padding for more breathing room */
+  border-radius: 20px; /* Even more rounded corners */
+  box-shadow: 0 12px 30px var(--shadow-color); /* Enhanced and refined shadow */
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease; /* Smoother transition */
+  overflow: hidden; /* Ensures shadows and rounded corners are contained */
+  position: relative; /* For potential future absolute positioning of elements */
+}
+
+.user-list-container:hover {
+  transform: translateY(-6px); /* More pronounced lift on hover */
+  box-shadow: 0 15px 35px var(--shadow-color); /* Increased shadow on hover */
+}
+
+/* User List Title */
+.user-list-title {
+  color: var(--light-blue);
+  font-size: 2.4em; /* Larger and more impactful title */
+  margin-bottom: 1.5em; /* More space below the title */
+  border-bottom: 3px solid var(--accent-blue);
+  padding-bottom: 0.8em;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); /* Slightly stronger text shadow */
+  letter-spacing: 0.06em; /* Increased letter spacing */
+  font-weight: 700; /* Bolder title */
+  text-align: center; /* Centered title for better aesthetics */
+}
+
+/* Search Container & Input */
+.search-container {
+  max-width: 500px; /* Wider search container */
+  margin: 1.5rem auto 1.5rem 0; /* Centered search bar on its own row, or pushed right */
+  text-align: right;
+}
+
+.search-input {
+  padding: 0.7rem 1.4rem; /* More generous padding */
+  font-size: 1.15rem; /* Slightly larger font size */
+  border-radius: 10px; /* More rounded */
+  border: 1px solid var(--input-border);
+  width: 100%;
+  max-width: 400px; /* Wider input */
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Inner shadow for depth */
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 4px rgba(129, 212, 250, 0.3); /* More prominent focus shadow */
+}
+
+/* User Table */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2em; /* Increased margin */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.03
+  ); /* Slight background for the table */
+  border-radius: 10px; /* Rounded corners for the table itself */
+  overflow: hidden; /* Ensures rounded corners are visible */
+}
+
+.user-table th,
+.user-table td {
+  padding: 1.1em 1.6em; /* Increased padding for cells */
+  border-bottom: 1px solid rgba(129, 212, 250, var(--border-alpha)); /* Lighter border */
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.user-table th {
+  background-color: rgba(129, 212, 250, var(--hover-bg-alpha));
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  font-size: 1.15em; /* Larger font size for header */
+  font-weight: 700; /* Bolder font weight for header */
+  letter-spacing: 0.07em;
+  position: sticky; /* Make headers sticky for long tables */
+  top: 0;
+  z-index: 10; /* Ensure headers stay above content */
+}
+
+.user-table tr:hover td {
+  background-color: rgba(
+    129,
+    212,
+    250,
+    var(--hover-bg-alpha)
+  ); /* Consistent hover background */
+}
+
+/* User Role Badge */
+.user-role-badge {
+  padding: 0.5em 1.2em;
+  border-radius: 25px; /* Even more rounded */
+  font-weight: 700; /* Bolder font weight */
+  font-size: 0.98em; /* Slightly larger */
+  text-transform: uppercase;
+  display: inline-block;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  min-width: 80px; /* Ensures consistent width for badges */
+  text-align: center;
+}
+
+.user-role-badge:hover {
+  transform: scale(1.08); /* More noticeable scale on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.admin-role {
+  background-color: var(--accent-blue);
+  color: #080f29;
+}
+
+.teacher-role {
+  background-color: #6ee7b7; /* Teal green */
+  color: #080f29;
+}
+
+.student-role {
+  background-color: #93c5fd; /* Light blue */
+  color: #080f29;
+}
+
+.unknown-role {
+  background-color: #9ca3af; /* Cool gray */
+  color: var(--primary-text);
+}
+
+/* Action Buttons */
+.action-btn.delete-btn {
+  background-color: var(--error-red);
+  color: white;
+  padding: 0.9em 2em; /* Increased padding */
+  border: none;
+  border-radius: 12px; /* More rounded */
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-weight: 600; /* Added font-weight */
+}
+
+.action-btn.delete-btn:hover {
+  background-color: #ef4444; /* Slightly lighter red on hover for contrast */
+  transform: translateY(-3px); /* More pronounced lift */
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.4);
+}
+
+.action-btn.delete-btn:active {
+  background-color: #b91c1c;
+  transform: translateY(0);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Snackbar Animations */
+.snackbar-success {
+  background-color: var(--success-green);
+  color: white;
+  border-radius: 12px; /* More rounded */
+  padding: 1.2em 2.5em; /* Increased padding */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+  animation:
+    slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    slideOut 0.4s 2.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; /* Smoother cubic-bezier timings */
+  font-weight: 500;
+  text-align: center;
+}
+
+.snackbar-error {
+  background-color: var(--error-red);
+  color: white;
+  border-radius: 12px;
+  padding: 1.2em 2.5em;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  animation:
+    slideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    slideOut 0.4s 2.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+  font-weight: 500;
+  text-align: center;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(150%); /* Start further down */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(150%); /* End further down */
+    opacity: 0;
+  }
+}
+
+/* General Button Styles */
+.btn {
+  display: inline-block;
+  padding: 0.9em 2em; /* More consistent padding */
+  margin: 0.6em; /* Slightly increased margin */
+  text-align: center;
+  border-radius: 15px; /* Even more rounded */
+  font-size: 1.15em; /* Slightly larger font size */
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  min-width: 100px; /* Ensures consistent button width */
+}
+
+.btn:hover {
+  transform: translateY(-3px); /* More pronounced lift */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Increased shadow on hover */
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* View Button */
+.btn-info {
+  background-color: var(--accent-blue);
+  color: #080f29;
+}
+
+.btn-info:hover {
+  background-color: #6edaff; /* Lighter blue on hover for info */
+}
+
+/* Edit Button */
+.btn-edit {
+  background-color: #6ee7b7;
+  color: #080f29;
+}
+
+.btn-edit:hover {
+  background-color: #4cdbaf; /* Slightly lighter green on hover for edit */
+}
+
+/* Responsive button styling */
+@media (max-width: 768px) {
+  .btn {
+    padding: 0.8em 1.8em;
+    font-size: 1.05em;
+    width: auto; /* Allow buttons to adjust width */
+    display: block; /* Stack buttons vertically */
+    margin: 0.5em auto; /* Center stacked buttons */
+  }
+  .search-input {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.05rem;
+    max-width: 100%; /* Full width on smaller screens */
+  }
+  .search-container {
+    text-align: center; /* Center search bar on mobile */
+    margin: 1.2rem auto;
+  }
+  .user-list-title {
+    font-size: 1.8em; /* Smaller title on mobile */
+  }
+}
+
+/* Responsive table styling */
+@media (max-width: 768px) {
+  .user-table,
+  .user-table thead,
+  .user-table tbody,
+  .user-table th,
+  .user-table td,
+  .user-table tr {
+    display: block;
+  }
+
+  .user-table thead {
+    display: none; /* Hide original headers */
+  }
+
+  .user-table tr {
+    margin-bottom: 1.5em; /* Space between rows */
+    border: 1px solid rgba(129, 212, 250, 0.2); /* Border around each "row" */
+    border-radius: 8px; /* Rounded corners for each mobile row */
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for individual rows */
+  }
+
+  .user-table td {
+    padding: 1em;
+    border: none; /* Remove individual cell borders */
+    border-bottom: 1px solid rgba(129, 212, 250, 0.1); /* Light separator */
+    position: relative;
+    padding-left: 45%; /* Adjust for data-label */
+    text-align: left;
+    white-space: normal; /* Allow text wrapping */
+  }
+
+  .user-table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    color: var(--accent-blue);
+    margin-bottom: 0.3em;
+    position: absolute;
+    left: 1em;
+    top: 1em;
+    width: 40%; /* Allocate width for the label */
+    box-sizing: border-box; /* Include padding in width */
+  }
+
+  .user-table td:last-child {
+    border-bottom: none; /* No border for the last cell in a mobile row */
+  }
+}
+
+/* Pagination Controls */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px; /* More space above pagination */
+  gap: 12px; /* Slightly increased gap */
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+}
+
+.pagination-btn {
+  background-color: #007bff; /* Keep original blue for pagination */
+  color: white;
+  border: none;
+  padding: 10px 18px; /* More padding */
+  border-radius: 8px; /* More rounded */
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-weight: 500;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.pagination-btn:disabled {
+  background-color: #6c757d; /* Darker disabled color */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+}
+
+.page-size-select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  font-size: 1em;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.page-size-select:focus {
+  outline: none;
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(129, 212, 250, 0.2);
+}
+
+.page-numbers {
+  display: flex;
+  gap: 8px; /* Slightly increased gap */
+}
+
+.page-number-btn {
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.1
+  ); /* Lighter background for inactive pages */
+  color: var(--primary-text);
+  border: 1px solid rgba(129, 212, 250, 0.2);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  font-weight: 500;
+}
+
+.page-number-btn.active {
+  background-color: var(--accent-blue); /* Active page uses accent color */
+  color: #080f29; /* Dark text for active page */
+  border-color: var(--accent-blue);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.page-number-btn:hover:not(.active) {
+  background-color: rgba(129, 212, 250, var(--hover-bg-alpha));
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}

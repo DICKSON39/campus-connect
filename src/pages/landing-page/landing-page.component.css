@@ -714,19 +714,7 @@ body {
   }
 }
 
-/* src/app/pages/landing-page/landing-page.component.css */
 
-/* Removed .post-image-container as images are handled by .post-content img */
-
-/* Styles for image directly within .post-content, ensure these are effective */
-/*.post-content img {*/
-/* max-width: 100%; !* Ensure image doesn't overflow its container *!*/
-/* height: auto;    !* Maintain aspect ratio *!*/
-/* display: block;  !* Ensures it takes up its own line and allows margin auto *!*/
-/* margin: 15px auto; !* Add vertical margin and center horizontally *!*/
-/* border-radius: 8px; !* Rounded corners for images *!*/
-/* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); !* Subtle shadow for depth *!*/
-/*}*/
 .post-image  {
   max-width: 50%; /* Further reduced for this specific rule if it's outside .post-content */
   height: 300px; /* Reduced height */

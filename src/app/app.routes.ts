@@ -5,6 +5,7 @@ import {LoginComponent} from '../pages/login/login.component';
 import {ProfilePageComponent} from '../pages/profile-page/profile-page.component';
 import {AuthGuard} from './auth.guard';
 import {AdminDashboardComponent} from '../pages/admin-dashboard/admin-dashboard.component';
+import {Users} from '../pages/users/users';
 
 export const routes: Routes = [
   {path:'',component:LandingPageComponent},
@@ -24,5 +25,14 @@ export const routes: Routes = [
     data: {
       roles:[1]
     },
+
+  },
+  {
+    path:'admin/users',
+    component: Users,
+    canActivate: [AuthGuard],
+    data: {
+      roles:[1]
+    }
   }
 ];
