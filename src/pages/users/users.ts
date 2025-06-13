@@ -53,14 +53,12 @@ export class Users implements OnInit{
     this.userService
       .getUsers(this.currentPage, this.pageSize, this.userSearchTerm)
       .subscribe((paginatedData: PaginatedUsers) => {
-        this.users = paginatedData.items.map((user) => ({
-          ...user,
-          roleName: this.getRoleName(user.role_id),
-        }));
+        this.users = paginatedData.items;
         this.totalItems = paginatedData.totalItems;
         this.totalPages = paginatedData.totalPages;
       });
   }
+
 
 
   getRoleName(role_id: number): string {
@@ -68,9 +66,9 @@ export class Users implements OnInit{
       case 1:
         return 'Admin';
       case 2:
-        return 'Teacher';
+        return 'User';
       case 3:
-        return 'Student';
+        return 'Dickson';
       default:
         return 'Unknown';
     }
@@ -104,6 +102,10 @@ export class Users implements OnInit{
       });
     }
     this.showModal = false;
+  }
+
+  cancelDelete():void{
+    this.showModal = false
   }
 
   // --- Pagination Methods ---

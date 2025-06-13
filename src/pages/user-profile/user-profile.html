@@ -1,0 +1,18 @@
+<div>
+  <div>
+    <h2>User Profile</h2>
+    <div *ngIf="user && user.id; else loadingOrError">
+      <p><strong>Name:</strong> {{ user.first_name }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Phone:</strong> {{ user.last_name }}</p>
+      <p><strong>Role:</strong> {{ getRoleName(user.role_id) }}</p>
+
+
+
+    </div>
+    <ng-template #loadingOrError>
+      <p *ngIf="loading">Loading user profile...</p>
+      <p *ngIf="!loading">User not found or error loading user.</p>
+    </ng-template>
+  </div>
+</div>

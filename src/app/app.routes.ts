@@ -6,6 +6,8 @@ import {ProfilePageComponent} from '../pages/profile-page/profile-page.component
 import {AuthGuard} from './auth.guard';
 import {AdminDashboardComponent} from '../pages/admin-dashboard/admin-dashboard.component';
 import {Users} from '../pages/users/users';
+import {UserProfile} from '../pages/user-profile/user-profile';
+import {EdituserComponent} from '../pages/edituser-component/edituser-component';
 
 export const routes: Routes = [
   {path:'',component:LandingPageComponent},
@@ -30,6 +32,23 @@ export const routes: Routes = [
   {
     path:'admin/users',
     component: Users,
+    canActivate: [AuthGuard],
+    data: {
+      roles:[1]
+    }
+  },
+  {
+    path: 'users/:id',
+    component:UserProfile,
+    canActivate: [AuthGuard],
+    data: {
+      roles:[1]
+    }
+  },
+
+  {
+    path:'users/update/:id',
+    component:EdituserComponent,
     canActivate: [AuthGuard],
     data: {
       roles:[1]

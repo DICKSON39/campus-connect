@@ -3,12 +3,15 @@
   <p>Welcome, Administrator! Here you can manage various aspects of CampusConnect.</p>
 
   <div class="admin-sections">
-    <div class="section-card" *ngFor="let task of adminTasks">
-      <h3>{{ task }}</h3>
-      <p>Manage {{ task.toLowerCase() }} here.</p>
-      <button class="btn-go-to-section">Go to Section</button>
+    <div class="section-card">
+      <h3>User Management</h3>
+      <p>Manage users here.</p>
+      <button class="btn-go-to-section" [routerLink]="['/admin/users']">Go to Users</button>
     </div>
   </div>
+
+
+
 
   <hr> <h3 class="section-heading">Content Moderation: Posts & Comments</h3>
 

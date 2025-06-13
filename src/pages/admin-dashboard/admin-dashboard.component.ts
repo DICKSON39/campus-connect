@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GetPostsBackendResponse, PostsItems} from '../../app/interface/post.interface';
 import {PostServiceService} from '../../services/post-service.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-admin-dashboard',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.css'
 })

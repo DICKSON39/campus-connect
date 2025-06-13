@@ -11,58 +11,52 @@
 <div class="section">
   <h2>All Users</h2>
   <table class="user-table">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th>Role</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{ user.id }}</td>
-      <td>{{ user.name }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.phoneNumber }}</td>
-      <td>
-          <span
-            class="user-role-badge"
-            [ngClass]="{
-              'admin-role': user.roleName === 'Admin',
-              'teacher-role': user.roleName === 'Teacher',
-              'student-role': user.roleName === 'Student',
-              'unknown-role': !['Admin', 'Teacher', 'Student'].includes(
-                user.roleName ?? ''
-              ),
-            }"
-          >
-            {{ user.roleName }}
-          </span>
-      </td>
-      <td>
-        <button class="action-btn delete-btn" (click)="deleteUser(user.id)">
-          Delete
-        </button>
-        <a [routerLink]="['/admin/user', user.id]" class="btn btn-info"
-        >View</a
-        >
-        <a [routerLink]="['/users/update', user.id]" class="btn btn-info"
-        >Edit</a
-        >
-      </td>
-    </tr>
-    <tr *ngIf="users.length === 0">
-      <td colspan="6" style="text-align: center; padding: 20px">
-        No users found.
-      </td>
-    </tr>
-    </tbody>
-  </table>
 
-  <div class="pagination-controls" *ngIf="totalPages > 0">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.last_name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.first_name }}</td>
+        <td>
+        <span
+          class="user-role-badge"
+          [ngClass]="{
+            'admin-role': user.role_name === 'Admin',
+            'user-role': user.role_name === 'User',
+            'dickson-role': user.role_name === 'Dickson',
+            'unknown-role': !['Admin', 'User', 'Dickson'].includes(user.role_name)
+          }"
+        >
+          {{ user.role_name || 'Unknown' }}
+        </span>
+        </td>
+        <td>
+          <button class="action-btn delete-btn" (click)="deleteUser(user.id)">Delete</button>
+          <a [routerLink]="['/users', user.id]" class="btn btn-info">View</a>
+          <a [routerLink]="['/users/update', user.id]" class="btn btn-info">Edit</a>
+        </td>
+      </tr>
+      <tr *ngIf="users.length === 0">
+        <td colspan="6" style="text-align: center; padding: 20px">
+          No users found.
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <div class="pagination-controls" *ngIf="totalPages > 0">
     <button
       (click)="prevPage()"
       [disabled]="currentPage === 1"

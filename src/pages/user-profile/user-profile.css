@@ -1,0 +1,52 @@
+.main-content {
+  flex: 1;
+  padding: 2em;
+  background: #080f29; /* Dark background for content */
+  color: #f0f8ff; /* Light text */
+  box-sizing: border-box;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  margin: 1em; /* Adjusted margin for better spacing */
+}
+
+.section {
+  background: rgba(
+    30,
+    41,
+    59,
+    0.8
+  ); /* Dark, translucent background for the card */
+  border-radius: 15px; /* Rounded corners, consistent with landing page */
+  padding: 2em; /* Increased padding for spaciousness */
+  margin-bottom: 2em; /* Margin between sections if you have more */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Deeper shadow for a lifted effect */
+  border: 1px solid rgba(162, 210, 255, 0.1); /* Subtle electric blue border */
+}
+
+.section h2 {
+  color: #a2d2ff; /* Electric blue heading */
+  font-size: 1.8em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid #60a5fa; /* Blue accent border */
+  padding-bottom: 0.5em;
+}
+
+.section p {
+  line-height: 1.8; /* Improved readability */
+  margin-bottom: 0.75em; /* Space between paragraphs */
+  font-size: 1em;
+}
+
+.section strong {
+  color: #a2d2ff; /* Highlight important text */
+  font-weight: bold;
+}
+
+.loading {
+  color: #d1cfe2; /* Light gray for loading text */
+  font-style: italic;
+}
+
+.error {
+  color: #ff8a65; /* Orange/red for error text */
+}

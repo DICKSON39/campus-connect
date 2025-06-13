@@ -44,6 +44,12 @@ export class UserService {
     })
   }
 
+  getUserById(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/${userId}`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
   getUsers(
     page: number,
     pageSize: number,
